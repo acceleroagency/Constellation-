@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Constellation Advisory Group</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --olive: #2A341E;
+  --olive-mid: #3D4F2A;
+  --olive-deep: #1E2616;
+  --olive-light: #4a5e34;
+  --graphite: #3A3F41;
+  --graphite-mid: #5A6063;
+  --lime: #CDEE00;
+  --lime-dim: #A8C200;
+  --off-white: #F2F2EC;
+  --white: #FFFFFF;
+  --charcoal: #1a1a1a;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--olive);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CUSTOM CURSOR ── */
+.cursor {
+  position: fixed; top: 0; left: 0;
+  width: 12px; height: 12px;
+  background: var(--lime);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
+  mix-blend-mode: difference;
+}
+.cursor-ring {
+  position: fixed; top: 0; left: 0;
+  width: 40px; height: 40px;
+  border: 1px solid var(--lime);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+  opacity: 0.5;
+}
+.cursor.hover { width: 20px; height: 20px; }
+.cursor-ring.hover { width: 60px; height: 60px; opacity: 0.3; }
+
+/* ── NOISE TEXTURE ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 1000; opacity: 0.4;
+}
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 0 6vw;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg-circles {
+  position: absolute; inset: 0; pointer-events: none;
+}
+.hero-bg-circles span {
+  position: absolute; border-radius: 50%;
+  border: 1px solid rgba(205, 238, 0, 0.1);
+  animation: pulse-circle 8s ease-in-out infinite;
+}
+.hero-bg-circles span:nth-child(1) { width: 600px; height: 600px; right: -150px; top: -150px; animation-delay: 0s; }
+.hero-bg-circles span:nth-child(2) { width: 400px; height: 400px; right: -50px; top: -50px; animation-delay: 1s; background: rgba(205,238,0,0.03); }
+.hero-bg-circles span:nth-child(3) { width: 200px; height: 200px; right: 50px; top: 50px; animation-delay: 2s; background: rgba(205,238,0,0.06); }
+
+@keyframes pulse-circle {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+.hero-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.3em;
+  color: var(--lime);
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fade-up 0.8s ease 0.2s forwards;
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 24px;
+}
+.hero-eyebrow::before {
+  content: ''; display: block;
+  width: 40px; height: 1px; background: var(--lime);
+}
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(80px, 16vw, 220px);
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+  opacity: 0;
+  transform: translateY(40px);
+  animation: fade-up 1s ease 0.4s forwards;
+}
+.hero-title .line-2 {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--lime);
+  display: block;
+}
+.hero-title .line-3 {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: clamp(40px, 7vw, 90px);
+  color: var(--lime);
+  display: block;
+  margin-top: 8px;
+}
+
+.hero-tagline {
+  margin-top: 40px;
+  font-size: clamp(14px, 1.8vw, 18px);
+  font-weight: 300;
+  color: rgba(255,255,255,0.7);
+  max-width: 500px;
+  line-height: 1.7;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fade-up 0.8s ease 0.8s forwards;
+}
+.hero-tagline strong { color: var(--lime); font-weight: 600; }
+
+.hero-cta {
+  margin-top: 48px;
+  display: flex; gap: 20px; align-items: center;
+  opacity: 0; animation: fade-up 0.8s ease 1s forwards;
+}
+.btn-primary {
+  background: var(--lime);
+  color: var(--olive-deep);
+  padding: 14px 32px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700; font-size: 13px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  border: none; cursor: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 20px 40px rgba(205,238,0,0.3); }
+
+.hero-scroll {
+  position: absolute; bottom: 40px; left: 6vw;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  opacity: 0; animation: fade-up 0.8s ease 1.4s forwards;
+}
+.scroll-line {
+  width: 60px; height: 1px; background: rgba(255,255,255,0.2);
+  position: relative; overflow: hidden;
+}
+.scroll-line::after {
+  content: ''; position: absolute;
+  top: 0; left: -100%; width: 100%; height: 100%;
+  background: var(--lime);
+  animation: scroll-slide 2s ease-in-out infinite;
+}
+@keyframes scroll-slide { 0% { left: -100%; } 100% { left: 100%; } }
+
+.hero-stats {
+  position: absolute; right: 6vw; bottom: 40px;
+  display: flex; gap: 48px;
+  opacity: 0; animation: fade-up 0.8s ease 1.2s forwards;
+}
+.stat { text-align: right; }
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px; line-height: 1;
+  color: var(--lime);
+}
+.stat-label {
+  font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-top: 4px;
+}
+
+@keyframes fade-up {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── MARQUEE ── */
+.marquee-section {
+  background: var(--lime);
+  padding: 16px 0;
+  overflow: hidden;
+  position: relative;
+}
+.marquee-track {
+  display: flex; gap: 0;
+  white-space: nowrap;
+  animation: marquee 20s linear infinite;
+}
+.marquee-track span {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px; letter-spacing: 0.05em;
+  color: var(--olive);
+  padding: 0 24px;
+}
+.marquee-track span.dot { color: var(--olive-mid); }
+@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+/* ── SECTIONS ── */
+section { padding: 120px 6vw; position: relative; }
+
+.section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.4em;
+  text-transform: uppercase; color: var(--lime);
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 48px;
+}
+.section-label::before { content: ''; width: 30px; height: 1px; background: var(--lime); }
+
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: 0.92; letter-spacing: -0.01em;
+}
+
+/* ── WHO WE ARE ── */
+#who {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+}
+.who-left {}
+.who-left .section-title { margin-bottom: 32px; }
+.who-left p {
+  font-size: 16px; line-height: 1.8; color: rgba(255,255,255,0.7);
+  margin-bottom: 20px;
+}
+.who-left p strong { color: var(--lime); font-weight: 600; }
+
+.disciplines-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+}
+.disc-item {
+  background: var(--olive-mid);
+  padding: 20px 24px;
+  position: relative; overflow: hidden;
+  cursor: none;
+  transition: background 0.3s ease;
+}
+.disc-item::before {
+  content: ''; position: absolute;
+  bottom: 0; left: 0; width: 0; height: 2px;
+  background: var(--lime);
+  transition: width 0.4s ease;
+}
+.disc-item:hover { background: var(--olive-light); }
+.disc-item:hover::before { width: 100%; }
+.disc-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 11px; color: var(--lime); letter-spacing: 0.2em;
+  margin-bottom: 8px;
+}
+.disc-name {
+  font-size: 14px; font-weight: 600;
+  transition: transform 0.3s ease;
+}
+.disc-item:hover .disc-name { transform: translateX(4px); }
+.disc-desc { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 6px; line-height: 1.5; }
+
+/* ── VECTOR FRAMEWORK ── */
+#vector { background: var(--olive-deep); }
+
+.vector-intro {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+  margin-bottom: 80px;
+  align-items: end;
+}
+.vector-intro .section-title span {
+  color: transparent; -webkit-text-stroke: 1px var(--lime);
+}
+
+.vector-formula {
+  background: var(--olive-mid);
+  padding: 32px;
+  border-left: 3px solid var(--lime);
+}
+.formula-title { font-size: 10px; letter-spacing: 0.3em; color: var(--lime); margin-bottom: 16px; }
+.formula-text {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 20px; line-height: 1.5;
+  color: var(--off-white);
+}
+.formula-text span { color: var(--lime); }
+
+.vector-items { display: flex; flex-direction: column; gap: 2px; }
+
+.v-item {
+  display: grid; grid-template-columns: 120px 1fr auto;
+  align-items: center; gap: 32px;
+  padding: 32px 40px;
+  background: var(--olive-mid);
+  cursor: none;
+  position: relative; overflow: hidden;
+  transition: background 0.4s ease;
+}
+.v-item::after {
+  content: ''; position: absolute;
+  left: 0; top: 0; bottom: 0; width: 0;
+  background: rgba(205,238,0,0.05);
+  transition: width 0.4s ease;
+}
+.v-item:hover { background: var(--olive-light); }
+.v-item:hover::after { width: 100%; }
+
+.v-letter {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 72px; line-height: 1;
+  color: transparent; -webkit-text-stroke: 2px var(--lime);
+  transition: color 0.3s ease, -webkit-text-stroke 0.3s ease;
+  position: relative; z-index: 1;
+}
+.v-item:hover .v-letter {
+  color: var(--lime); -webkit-text-stroke: 2px var(--lime);
+}
+.v-content { position: relative; z-index: 1; }
+.v-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px; letter-spacing: 0.03em;
+  margin-bottom: 8px;
+  transition: transform 0.3s ease;
+}
+.v-item:hover .v-name { transform: translateX(8px); }
+.v-desc { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.6; max-width: 500px; }
+.v-discipline {
+  font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--lime); opacity: 0.7;
+  text-align: right;
+  position: relative; z-index: 1;
+  white-space: nowrap;
+}
+
+/* ── CHART SECTION ── */
+#impact { background: var(--olive); }
+
+.impact-header {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+  margin-bottom: 80px; align-items: end;
+}
+.impact-header p { font-size: 16px; color: rgba(255,255,255,0.6); line-height: 1.8; }
+
+.charts-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+}
+
+.chart-card {
+  background: var(--olive-mid);
+  padding: 40px;
+  position: relative; overflow: hidden;
+}
+.chart-card-label {
+  font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--lime); margin-bottom: 8px;
+}
+.chart-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; margin-bottom: 32px; }
+
+/* Bar chart */
+.bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 160px; }
+.bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.bar {
+  width: 100%; background: rgba(255,255,255,0.1);
+  position: relative; overflow: hidden;
+  transition: background 0.3s ease;
+}
+.bar-fill {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: var(--lime);
+  transition: height 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  height: 0;
+}
+.bar-fill.alt { background: var(--lime-dim); }
+.bar-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px; color: var(--lime);
+}
+.bar-lbl { font-size: 9px; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; text-align: center; }
+
+/* Line chart */
+.line-chart-wrap { height: 160px; position: relative; }
+svg.line-chart { width: 100%; height: 100%; overflow: visible; }
+.chart-line-path {
+  fill: none; stroke: var(--lime); stroke-width: 2;
+  stroke-dasharray: 1000; stroke-dashoffset: 1000;
+  transition: stroke-dashoffset 2s ease;
+}
+.chart-area-path { fill: rgba(205,238,0,0.08); opacity: 0; transition: opacity 1s ease 1s; }
+.chart-dot { fill: var(--lime); r: 4; opacity: 0; transition: opacity 0.3s ease; }
+
+/* Radial / donut */
+.radial-wrap { display: flex; gap: 32px; align-items: center; }
+svg.radial { overflow: visible; }
+.radial-track { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 8; }
+.radial-fill {
+  fill: none; stroke-width: 8; stroke-linecap: round;
+  stroke-dasharray: 283; stroke-dashoffset: 283;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.radial-label { text-anchor: middle; dominant-baseline: middle; }
+.radial-num { font-family: 'Bebas Neue'; font-size: 28px; fill: var(--lime); }
+.radial-sub { font-family: 'DM Sans'; font-size: 8px; fill: rgba(255,255,255,0.5); letter-spacing: 0.2em; }
+.radial-legend { display: flex; flex-direction: column; gap: 12px; }
+.rl-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(255,255,255,0.6); }
+.rl-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* Number counter */
+.number-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+  margin-top: 2px;
+}
+.num-card {
+  background: var(--olive-deep);
+  padding: 32px 24px;
+  position: relative;
+}
+.num-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--lime); transform: scaleX(0);
+  transform-origin: left; transition: transform 0.6s ease;
+}
+.num-card.visible::before { transform: scaleX(1); }
+.num-big {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 64px; line-height: 1; color: var(--lime);
+  display: flex; align-items: flex-start;
+}
+.num-big sup { font-size: 24px; margin-top: 8px; }
+.num-desc { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 8px; line-height: 1.5; }
+
+/* ── THREE LINES ── */
+.lines-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 2px; margin-top: 56px;
+}
+.line-card {
+  background: var(--olive-mid);
+  padding: 36px 32px;
+  position: relative; overflow: hidden;
+  cursor: none;
+  transition: background 0.4s ease;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.line-card:nth-child(2) { background: var(--olive-deep); border: 1px solid rgba(205,238,0,0.15); }
+.line-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--lime);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.5s ease;
+}
+.line-card:hover::before { transform: scaleX(1); }
+.line-card:hover { background: var(--olive-light); }
+.line-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px; color: var(--lime);
+  letter-spacing: 0.2em;
+}
+.line-tag {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--lime);
+}
+.line-title-sm {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(26px, 2.6vw, 36px);
+  line-height: 0.95;
+}
+.line-buyer {
+  display: inline-block; align-self: flex-start;
+  background: var(--lime); color: var(--olive);
+  padding: 5px 12px; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+.line-pitch-sm {
+  font-family: 'DM Serif Display', serif; font-style: italic;
+  font-size: 15px; line-height: 1.55;
+  color: rgba(255,255,255,0.8);
+  border-left: 2px solid var(--lime); padding-left: 16px;
+}
+.line-items {
+  font-size: 12px; letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.5);
+  padding-top: 12px; line-height: 1.6;
+  border-top: 1px solid rgba(205,238,0,0.15);
+  margin-top: auto;
+}
+
+/* ── FOUNDERS ── */
+#founders { background: var(--olive); }
+.founders-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+  margin-top: 64px;
+}
+.founder-card {
+  background: var(--olive-mid);
+  padding: 48px;
+  position: relative; overflow: hidden;
+  cursor: none;
+}
+.founder-card::after {
+  content: attr(data-initial);
+  position: absolute; right: -20px; bottom: -40px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 200px; line-height: 1;
+  color: rgba(205,238,0,0.04);
+  pointer-events: none;
+  transition: color 0.4s ease, transform 0.4s ease;
+}
+.founder-card:hover::after { color: rgba(205,238,0,0.07); transform: scale(1.05); }
+.founder-num {
+  font-size: 10px; letter-spacing: 0.4em; color: var(--lime); margin-bottom: 20px;
+}
+.founder-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px; line-height: 0.9; margin-bottom: 8px;
+}
+.founder-role {
+  font-size: 13px; color: var(--lime-dim); margin-bottom: 4px; font-weight: 500;
+}
+.founder-geo { font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 28px; }
+.founder-divider { width: 40px; height: 1px; background: var(--lime); margin-bottom: 24px; }
+.founder-bio { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.8; }
+.founder-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.ftag {
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  border: 1px solid rgba(205,238,0,0.3); color: var(--lime);
+  padding: 4px 10px;
+}
+
+/* ── VALUE PROP ── */
+#value { background: var(--olive-deep); text-align: center; padding: 160px 6vw; }
+.value-big {
+  font-family: 'DM Serif Display', serif; font-style: italic;
+  font-size: clamp(28px, 4vw, 52px);
+  line-height: 1.4; max-width: 900px; margin: 0 auto;
+  color: var(--off-white);
+}
+.value-big span { color: var(--lime); }
+.value-formula {
+  margin-top: 60px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; flex-wrap: wrap;
+}
+.vf-item {
+  background: var(--olive-mid);
+  padding: 20px 28px; text-align: center;
+  position: relative;
+}
+.vf-item:not(:last-child)::after {
+  content: '+';
+  position: absolute; right: -14px; top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px; color: var(--lime); z-index: 1;
+}
+.vf-item:last-child { background: var(--lime); }
+.vf-item:last-child .vf-top,
+.vf-item:last-child .vf-bot { color: var(--olive); }
+.vf-top { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--lime); line-height: 1; }
+.vf-item:last-child .vf-top { font-size: 32px; }
+.vf-bot { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--olive-deep);
+  padding: 60px 6vw;
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid rgba(205,238,0,0.2);
+}
+.footer-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px; letter-spacing: 0.05em;
+}
+.footer-logo span { color: var(--lime); }
+.footer-sub { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 4px; letter-spacing: 0.1em; }
+.footer-right { text-align: right; font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.8; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 20px 6vw;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: background 0.4s ease, padding 0.4s ease;
+}
+nav.scrolled {
+  background: rgba(30,38,22,0.95);
+  backdrop-filter: blur(20px);
+  padding: 14px 6vw;
+  border-bottom: 1px solid rgba(205,238,0,0.1);
+}
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif; font-size: 24px;
+  display: flex; align-items: center; gap: 10px; cursor: none;
+}
+.nav-logo span { color: var(--lime); }
+.nav-links { display: flex; gap: 32px; }
+.nav-links a {
+  font-size: 12px; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(255,255,255,0.5);
+  text-decoration: none; cursor: none;
+  transition: color 0.3s ease;
+  position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+  height: 1px; background: var(--lime);
+  transform: scaleX(0); transform-origin: right;
+  transition: transform 0.3s ease;
+}
+.nav-links a:hover { color: var(--lime); }
+.nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+
+
+/* ── CONSTELLATION CANVAS ── */
+#star-canvas {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+}
+#hero, nav, section, .marquee-section, footer {
+  position: relative; z-index: 1;
+}
+.hero-bg-circles { z-index: 0; }
+
+/* ── CONSTELLATION LOGO MARK ── */
+.c-mark { display: inline-block; vertical-align: middle; margin-right: 10px; }
+
+/* ── SCROLL REVEAL ── */
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ── VCHECK LOGO ── */
+.vcheck {
+  width: 28px; height: 28px; position: relative; display: inline-block;
+}
+.vcheck svg { width: 100%; height: 100%; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  #who, .vector-intro, .impact-header, .lines-grid, .founders-grid, .charts-grid { grid-template-columns: 1fr; }\n  .line-card { padding: 32px 24px; }
+  .hero-stats { display: none; }
+  .number-grid { grid-template-columns: 1fr 1fr; }
+  .value-formula { flex-direction: column; gap: 2px; }
+  .vf-item::after { display: none; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="star-canvas"></canvas>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">
+    <svg class="c-mark" width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <circle cx="14" cy="4" r="2.5" fill="#CDEE00"/>
+      <circle cx="24" cy="10" r="1.8" fill="#CDEE00" opacity="0.7"/>
+      <circle cx="22" cy="22" r="2" fill="#CDEE00"/>
+      <circle cx="6" cy="18" r="1.5" fill="#CDEE00" opacity="0.6"/>
+      <circle cx="4" cy="8" r="2" fill="#CDEE00" opacity="0.8"/>
+      <circle cx="14" cy="14" r="1.2" fill="#CDEE00" opacity="0.4"/>
+      <line x1="14" y1="4" x2="24" y2="10" stroke="#CDEE00" stroke-width="0.6" opacity="0.4"/>
+      <line x1="24" y1="10" x2="22" y2="22" stroke="#CDEE00" stroke-width="0.6" opacity="0.4"/>
+      <line x1="22" y1="22" x2="6" y2="18" stroke="#CDEE00" stroke-width="0.6" opacity="0.4"/>
+      <line x1="6" y1="18" x2="4" y2="8" stroke="#CDEE00" stroke-width="0.6" opacity="0.4"/>
+      <line x1="4" y1="8" x2="14" y2="4" stroke="#CDEE00" stroke-width="0.6" opacity="0.4"/>
+      <line x1="14" y1="4" x2="14" y2="14" stroke="#CDEE00" stroke-width="0.4" opacity="0.25"/>
+      <line x1="24" y1="10" x2="14" y2="14" stroke="#CDEE00" stroke-width="0.4" opacity="0.25"/>
+    </svg>
+    <span>C</span>ONSTELLATION <span style="color:rgba(255,255,255,0.4); font-size:14px; margin-left:2px">ADVISORY GROUP</span>
+  </div>
+  <div class="nav-links">
+    <a href="#who">What We Do</a>
+    <a href="#vector">Framework</a>
+    <a href="#lines">Services</a>
+    <a href="#founders">Team</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-circles">
+    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice">
+      <!-- Constellation star cluster -->
+      <g opacity="0.6">
+        <circle cx="480" cy="80" r="3" fill="#CDEE00"/>
+        <circle cx="520" cy="120" r="2" fill="#CDEE00" opacity="0.7"/>
+        <circle cx="560" cy="90" r="2.5" fill="#CDEE00" opacity="0.5"/>
+        <circle cx="500" cy="160" r="1.5" fill="#CDEE00" opacity="0.8"/>
+        <circle cx="540" cy="55" r="1.8" fill="#CDEE00" opacity="0.6"/>
+        <circle cx="460" cy="140" r="2" fill="#CDEE00" opacity="0.4"/>
+        <circle cx="590" cy="140" r="1.5" fill="#CDEE00" opacity="0.5"/>
+        <circle cx="440" cy="60" r="1.5" fill="#CDEE00" opacity="0.6"/>
+        <line x1="480" y1="80" x2="520" y2="120" stroke="#CDEE00" stroke-width="0.8" opacity="0.3"/>
+        <line x1="520" y1="120" x2="560" y2="90" stroke="#CDEE00" stroke-width="0.8" opacity="0.3"/>
+        <line x1="560" y1="90" x2="540" y2="55" stroke="#CDEE00" stroke-width="0.8" opacity="0.3"/>
+        <line x1="480" y1="80" x2="440" y2="60" stroke="#CDEE00" stroke-width="0.8" opacity="0.3"/>
+        <line x1="520" y1="120" x2="500" y2="160" stroke="#CDEE00" stroke-width="0.8" opacity="0.3"/>
+        <line x1="560" y1="90" x2="590" y2="140" stroke="#CDEE00" stroke-width="0.8" opacity="0.3"/>
+        <line x1="500" y1="160" x2="460" y2="140" stroke="#CDEE00" stroke-width="0.8" opacity="0.3"/>
+      </g>
+      <!-- Animated pulse on brightest star -->
+      <circle cx="480" cy="80" r="8" fill="none" stroke="#CDEE00" stroke-width="0.5" opacity="0">
+        <animate attributeName="r" values="4;16;4" dur="4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.5;0;0.5" dur="4s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="520" cy="120" r="6" fill="none" stroke="#CDEE00" stroke-width="0.5" opacity="0">
+        <animate attributeName="r" values="3;12;3" dur="5s" begin="1s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.4;0;0.4" dur="5s" begin="1s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+  </div>
+  <div class="hero-eyebrow">HQ Dubai · Global · Est. 2025</div>
+  <h1 class="hero-title">
+    CONSTELLATION
+    <span class="line-2">ADVISORY</span>
+    <span class="line-3">Group</span>
+  </h1>
+  <p class="hero-tagline">
+    World-class executives + AI, inside your company.<br>
+    <strong>Six disciplines. One methodology. Three ways to work with us.</strong>
+  </p>
+  <div class="hero-cta">
+    <button class="btn-primary">Request a Diagnosis</button>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num" data-target="13">0</div>
+      <div class="stat-label">Countries</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-target="6">0</div>
+      <div class="stat-label">Disciplines</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-target="90">0</div>
+      <div class="stat-label">Day Results</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track" id="marqueeTrack">
+    <span>Sales</span><span class="dot">✦</span>
+    <span>Marketing</span><span class="dot">✦</span>
+    <span>Change Management</span><span class="dot">✦</span>
+    <span>HR &amp; Talent</span><span class="dot">✦</span>
+    <span>M&amp;A Advisory</span><span class="dot">✦</span>
+    <span>AI Enablement</span><span class="dot">✦</span>
+    <span>VECTOR™ Framework</span><span class="dot">✦</span>
+    <span>Sales</span><span class="dot">✦</span>
+    <span>Marketing</span><span class="dot">✦</span>
+    <span>Change Management</span><span class="dot">✦</span>
+    <span>HR &amp; Talent</span><span class="dot">✦</span>
+    <span>M&amp;A Advisory</span><span class="dot">✦</span>
+    <span>AI Enablement</span><span class="dot">✦</span>
+    <span>VECTOR™ Framework</span><span class="dot">✦</span>
+  </div>
+</div>
+
+<!-- WHO WE ARE -->
+<section id="who">
+  <div class="who-left">
+    <div class="section-label reveal">Who We Are</div>
+    <h2 class="section-title reveal reveal-delay-1">NOT A<br>CONSULTING<br><span style="color:var(--lime)">FIRM.</span></h2>
+    <p class="reveal reveal-delay-2">
+      Constellation puts world-class executives — augmented by AI — inside companies that need to grow faster. <strong>For founders at $50M+ whose team hasn&rsquo;t kept pace. For PE firms whose portfolio companies must perform.</strong>
+    </p>
+    <p class="reveal reveal-delay-3">
+      We master <strong>six commercial disciplines</strong>, apply them through one methodology — <strong>VECTOR™</strong> — and deliver them through three lines of business. Simple to understand. Hard to replicate.
+    </p>
+    <p class="reveal reveal-delay-4" style="font-family:'DM Serif Display',serif; font-style:italic; font-size:18px; color:var(--lime); border-left:2px solid var(--lime); padding-left:20px; margin-top:32px;">
+      "The right executive. At the right moment. For the right stage."
+    </p>
+  </div>
+  <div>
+    <div class="section-label reveal">What We Master — Six Disciplines</div>
+    <div class="disciplines-grid reveal reveal-delay-1">
+      <div class="disc-item">
+        <div class="disc-num">01</div>
+        <div class="disc-name">Sales</div>
+        <div class="disc-desc">Architecture, process, high-performance teams</div>
+      </div>
+      <div class="disc-item">
+        <div class="disc-num">02</div>
+        <div class="disc-name">Marketing</div>
+        <div class="disc-desc">Positioning, demand generation, effectiveness</div>
+      </div>
+      <div class="disc-item">
+        <div class="disc-num">03</div>
+        <div class="disc-name">Change Management</div>
+        <div class="disc-desc">The human layer of every transformation</div>
+      </div>
+      <div class="disc-item">
+        <div class="disc-num">04</div>
+        <div class="disc-name">HR &amp; Talent</div>
+        <div class="disc-desc">Right people, right roles, right capabilities</div>
+      </div>
+      <div class="disc-item">
+        <div class="disc-num">05</div>
+        <div class="disc-name">M&amp;A Advisory</div>
+        <div class="disc-desc">Deals, integration, value creation post-close</div>
+      </div>
+      <div class="disc-item">
+        <div class="disc-num">06</div>
+        <div class="disc-name">AI Enablement</div>
+        <div class="disc-desc">The multiplier across the other five</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VECTOR FRAMEWORK -->
+<section id="vector">
+  <div class="vector-intro">
+    <div>
+      <div class="section-label reveal">The Methodology</div>
+      <h2 class="section-title reveal reveal-delay-1">
+        <span>VECTOR</span>™<br>FRAMEWORK
+      </h2>
+    </div>
+    <div class="vector-formula reveal reveal-delay-2">
+      <div class="formula-title">The Formula</div>
+      <div class="formula-text">
+        Business credibility <span>+</span> AI augmentation<br>
+        = commercial transformation <span>that compounds.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="vector-items">
+    <div class="v-item reveal">
+      <div class="v-letter">V</div>
+      <div class="v-content">
+        <div class="v-name">Vision &amp; Value</div>
+        <div class="v-desc">Define where the organization is going and quantify the commercial value of getting there. For a PE firm, this is the value creation thesis made executable. No movement without clarity of destination.</div>
+      </div>
+      <div class="v-discipline">Sales · M&A</div>
+    </div>
+    <div class="v-item reveal reveal-delay-1">
+      <div class="v-letter">E</div>
+      <div class="v-content">
+        <div class="v-name">Execution Excellence</div>
+        <div class="v-desc">Translate strategy into sequenced, measurable actions. The bridge between boardroom decisions and frontline reality. This is where most consultancies fail — and where Constellation stays to execute.</div>
+      </div>
+      <div class="v-discipline">Sales · Marketing</div>
+    </div>
+    <div class="v-item reveal reveal-delay-2">
+      <div class="v-letter">C</div>
+      <div class="v-content">
+        <div class="v-name">Change &amp; Culture</div>
+        <div class="v-desc">The human layer of transformation. Systems fail when people don't adopt them. Culture is the operating system beneath every process. Change Management made tangible and measurable.</div>
+      </div>
+      <div class="v-discipline">Change · HR</div>
+    </div>
+    <div class="v-item reveal reveal-delay-3">
+      <div class="v-letter">T</div>
+      <div class="v-content">
+        <div class="v-name">Talent Optimization</div>
+        <div class="v-desc">The right people in the right roles with the right capabilities. Talent gaps are revenue gaps. Integrates HR/Talent within the commercial transformation engine — not as a separate HR initiative.</div>
+      </div>
+      <div class="v-discipline">HR · Talent</div>
+    </div>
+    <div class="v-item reveal reveal-delay-4">
+      <div class="v-letter">O</div>
+      <div class="v-content">
+        <div class="v-name">Operational Intelligence</div>
+        <div class="v-desc">Instrument the business with data and AI-powered insight. Replace intuition-driven decisions with evidence-based ones. This is AI Enablement applied — the multiplier of every other dimension in VECTOR™.</div>
+      </div>
+      <div class="v-discipline">AI Enablement</div>
+    </div>
+    <div class="v-item reveal">
+      <div class="v-letter">R</div>
+      <div class="v-content">
+        <div class="v-name">Results Realization</div>
+        <div class="v-desc">Close the loop. Measure, adjust, and lock in gains. Transformation only counts when the numbers change permanently. For a board: ROI demonstrated. For a founder: the machine running without you.</div>
+      </div>
+      <div class="v-discipline">All Disciplines</div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT / CHARTS -->
+<section id="impact">
+  <div class="impact-header">
+    <div>
+      <div class="section-label reveal">The Impact</div>
+      <h2 class="section-title reveal reveal-delay-1">RESULTS<br>THAT<br><span style="color:var(--lime)">COMPOUND.</span></h2>
+    </div>
+    <div class="reveal reveal-delay-2">
+      <p>Every Constellation engagement is designed to deliver measurable outcomes in 90 days — and compounding results over 12–36 months. These are the benchmarks we hold ourselves to.</p>
+    </div>
+  </div>
+
+  <div class="charts-grid">
+    <!-- Bar chart -->
+    <div class="chart-card reveal">
+      <div class="chart-card-label">Revenue Growth</div>
+      <div class="chart-card-title">Commercial Performance Index</div>
+      <div class="bar-chart" id="barChart">
+        <div class="bar-wrap">
+          <div class="bar-val">+40%</div>
+          <div class="bar" style="height:120px"><div class="bar-fill" data-h="42"></div></div>
+          <div class="bar-lbl">Q1</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-val">+65%</div>
+          <div class="bar" style="height:120px"><div class="bar-fill" data-h="65"></div></div>
+          <div class="bar-lbl">Q2</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-val">+85%</div>
+          <div class="bar" style="height:120px"><div class="bar-fill alt" data-h="80"></div></div>
+          <div class="bar-lbl">Q3</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-val">+120%</div>
+          <div class="bar" style="height:120px"><div class="bar-fill" data-h="100"></div></div>
+          <div class="bar-lbl">Q4</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Radial -->
+    <div class="chart-card reveal reveal-delay-1">
+      <div class="chart-card-label">Client Outcomes</div>
+      <div class="chart-card-title">Transformation Success Rate</div>
+      <div class="radial-wrap">
+        <svg class="radial" viewBox="0 0 100 100" width="160" height="160">
+          <circle class="radial-track" cx="50" cy="50" r="45"/>
+          <circle class="radial-fill" id="radial1" cx="50" cy="50" r="45" stroke="#CDEE00" stroke-dasharray="283" stroke-dashoffset="283" transform="rotate(-90 50 50)"/>
+          <text class="radial-label" x="50" y="46">
+            <tspan class="radial-num" x="50" dy="0">92%</tspan>
+          </text>
+          <text class="radial-label" x="50" y="64" style="font-family:'DM Sans';font-size:7px;fill:rgba(255,255,255,0.4);letter-spacing:0.15em">ACHIEVED</text>
+        </svg>
+        <div class="radial-legend">
+          <div class="rl-item"><div class="rl-dot" style="background:var(--lime)"></div>Goals achieved in 90 days</div>
+          <div class="rl-item"><div class="rl-dot" style="background:var(--lime-dim)"></div>Extended engagements</div>
+          <div class="rl-item"><div class="rl-dot" style="background:rgba(255,255,255,0.2)"></div>Ongoing monitoring</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Line chart -->
+    <div class="chart-card reveal reveal-delay-2">
+      <div class="chart-card-label">Value Creation</div>
+      <div class="chart-card-title">EBITDA Improvement Curve</div>
+      <div class="line-chart-wrap">
+        <svg class="line-chart" id="lineChart" viewBox="0 0 400 160" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="lineGrad" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stop-color="#CDEE00" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#CDEE00" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path class="chart-area-path" id="areaPath" d="" fill="url(#lineGrad)"/>
+          <path class="chart-line-path" id="linePath" d="M0,140 C60,130 80,110 120,95 C160,80 180,70 220,55 C260,40 300,30 340,15 C360,10 380,8 400,5"/>
+          <circle class="chart-dot" cx="0" cy="140" r="4" id="d1"/>
+          <circle class="chart-dot" cx="120" cy="95" r="4" id="d2"/>
+          <circle class="chart-dot" cx="220" cy="55" r="4" id="d3"/>
+          <circle class="chart-dot" cx="340" cy="15" r="4" id="d4"/>
+          <circle class="chart-dot" cx="400" cy="5" r="4" id="d5"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Counter cards -->
+    <div class="chart-card reveal reveal-delay-3">
+      <div class="chart-card-label">The Math</div>
+      <div class="chart-card-title">Fractional vs. Full-Time</div>
+      <div style="display:flex; flex-direction:column; gap:16px; margin-top:8px">
+        <div>
+          <div style="font-size:10px;letter-spacing:0.2em;color:rgba(255,255,255,0.4);margin-bottom:6px">FULL-TIME CRO HIRE</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:rgba(255,255,255,0.3)">$250K–$350K<span style="font-size:18px">/yr</span></div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.3)">+ equity + benefits + 6-month search</div>
+        </div>
+        <div style="height:1px;background:rgba(205,238,0,0.2)"></div>
+        <div>
+          <div style="font-size:10px;letter-spacing:0.2em;color:var(--lime);margin-bottom:6px">CONSTELLATION GROWTH ENGAGEMENT</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--lime)">$180K–$264K<span style="font-size:18px">/yr</span></div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.5)">Zero equity · Zero benefits · Activate in days</div>
+        </div>
+        <div style="background:var(--lime);padding:10px 14px;display:inline-flex;align-items:center;gap:8px">
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--olive)">40–50% COST REDUCTION</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="number-grid">
+    <div class="num-card reveal">
+      <div class="num-big"><span class="counter" data-target="50">0</span><sup>M+</sup></div>
+      <div class="num-desc">Minimum revenue of clients we work with. Proven operators, not early-stage startups.</div>
+    </div>
+    <div class="num-card reveal reveal-delay-1">
+      <div class="num-big"><span class="counter" data-target="13">0</span><sup>+</sup></div>
+      <div class="num-desc">Countries where our founders have operated, built, and scaled commercial operations.</div>
+    </div>
+    <div class="num-card reveal reveal-delay-2">
+      <div class="num-big"><span class="counter" data-target="90">0</span></div>
+      <div class="num-desc">Days to first measurable results. Every engagement is designed with a 90-day activation.</div>
+    </div>
+    <div class="num-card reveal reveal-delay-3">
+      <div class="num-big"><span class="counter" data-target="6">0</span></div>
+      <div class="num-desc">Integrated disciplines unified under VECTOR™. One system. One language. One outcome.</div>
+    </div>
+  </div>
+</section>
+
+<!-- THREE LINES -->
+<section id="lines" style="background:var(--olive-deep); padding:120px 6vw">
+  <div class="section-label reveal">How You Work With Us</div>
+  <h2 class="section-title reveal reveal-delay-1">ONE FIRM.<br>THREE <span style="color:var(--lime)">LINES.</span></h2>
+  <p class="reveal reveal-delay-2" style="font-size:16px;color:rgba(255,255,255,0.6);max-width:640px;margin-top:24px;line-height:1.7">
+    The six disciplines are what we master. These three lines are how you engage us &mdash; each one built for a different client and a different problem.
+  </p>
+  <div class="lines-grid">
+    <div class="line-card reveal">
+      <div class="line-num">01</div>
+      <div class="line-tag">Constellation Executive</div>
+      <h3 class="line-title-sm">C-Suite as a Service</h3>
+      <div class="line-buyer">Founders &amp; CEOs &middot; $50M&ndash;$500M</div>
+      <p class="line-pitch-sm">"The executive your company needs &mdash; without the cost of hiring one."</p>
+      <div class="line-items">Fractional CRO &middot; COO &middot; CHRO &middot; Board Member &middot; Team training included</div>
+    </div>
+    <div class="line-card reveal reveal-delay-1">
+      <div class="line-num">02</div>
+      <div class="line-tag">Constellation Capital</div>
+      <h3 class="line-title-sm">Portfolio Value Creation</h3>
+      <div class="line-buyer">PE Firms &middot; Boards &middot; Investors</div>
+      <p class="line-pitch-sm">"We turn portfolio companies into their next multiple."</p>
+      <div class="line-items">Commercial transformation &middot; M&amp;A integration &middot; EBITDA improvement</div>
+    </div>
+    <div class="line-card reveal reveal-delay-2">
+      <div class="line-num">03</div>
+      <div class="line-tag">Constellation Technology</div>
+      <h3 class="line-title-sm">Technology Implementation</h3>
+      <div class="line-buyer">CEOs &middot; CTOs &middot; Commercial Leaders</div>
+      <p class="line-pitch-sm">"We build, implement, and operate the stack your strategy needs."</p>
+      <div class="line-items">eCommerce &middot; Cross-border operations &middot; AI agents &middot; Digital transformation</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDERS -->
+<section id="founders">
+  <div class="section-label reveal">The Team</div>
+  <h2 class="section-title reveal reveal-delay-1">THE<br>FOUNDERS</h2>
+  <p class="reveal reveal-delay-2" style="font-size:16px;color:rgba(255,255,255,0.6);max-width:600px;margin-top:16px;line-height:1.7">
+    Two founders. Decades of combined experience across four continents. One shared conviction: the way companies transform commercially — and the role AI plays in that — needed to be rebuilt from scratch.
+  </p>
+  <div class="founders-grid">
+    <div class="founder-card reveal" data-initial="★">
+      <div class="founder-num">FOUNDER 01</div>
+      <div class="founder-name">Operator<br>&amp;<br>Builder</div>
+      <div class="founder-role">Co-Founder &amp; Partner</div>
+      <div class="founder-geo">Mexico City · LATAM · USA</div>
+      <div class="founder-divider"></div>
+      <div class="founder-bio">Founder of a cross-border digital transformation and eCommerce operation spanning 13+ countries, with offices across the Americas, Europe, Asia and the Middle East. Builder of operational AI agents applied to sales, analytics and operations. International keynote speaker. Mentor to business associations across Mexico, LATAM and USA since 2020.<br><br>The credibility of someone who has <em>done it</em> — not just advised it.</div>
+      <div class="founder-tags">
+        <span class="ftag">eCommerce</span>
+        <span class="ftag">AI Agents</span>
+        <span class="ftag">Cross-Border</span>
+        <span class="ftag">Operator</span>
+      </div>
+    </div>
+    <div class="founder-card reveal reveal-delay-2" data-initial="★">
+      <div class="founder-num">FOUNDER 02</div>
+      <div class="founder-name">Enterprise<br>Growth<br>Executive</div>
+      <div class="founder-role">Co-Founder & Partner</div>
+      <div class="founder-geo">Dubai · Europe · UAE · Saudi Arabia</div>
+      <div class="founder-divider"></div>
+      <div class="founder-bio">Two decades in enterprise sales leadership at three of the world's most respected technology and consulting institutions. Head of Growth across MEA &amp; APAC. Oxford-educated. Fluent in four languages. A track record of closing enterprise deals with global Fortune 500 companies across four continents.<br><br>The credibility of someone who has <em>scaled it</em> at the highest institutional level.</div>
+      <div class="founder-tags">
+        <span class="ftag">Enterprise Sales</span>
+        <span class="ftag">MEA &amp; APAC</span>
+        <span class="ftag">Oxford</span>
+        <span class="ftag">4 Languages</span>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:2px;background:var(--olive-deep);padding:40px 48px;display:flex;align-items:center;gap:24px" class="reveal">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--lime);white-space:nowrap">WHY TOGETHER:</div>
+    <div style="font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7">One founder brings the credibility of someone who has <strong style="color:var(--white)">built and operated</strong> across markets. The other brings two decades of <strong style="color:var(--white)">enterprise sales leadership</strong> at the highest institutional level. Operator credibility + enterprise sales credibility — the combination no boutique advisory firm can replicate.</div>
+  </div>
+</section>
+
+<!-- VALUE PROP -->
+<section id="value">
+  <div class="section-label reveal" style="justify-content:center">The Promise</div>
+  <div class="value-big reveal reveal-delay-1">
+    "The strongest firms in the next decade will be those that combine <span>human transformation</span> with <span>AI augmentation</span> to deliver <span>commercial performance</span> that compounds — not just in one discipline, but across all of them."
+  </div>
+  <div class="value-formula reveal reveal-delay-2">
+    <div class="vf-item">
+      <div class="vf-top">SALES +<br>MARKETING</div>
+      <div class="vf-bot">Revenue Engine</div>
+    </div>
+    <div class="vf-item">
+      <div class="vf-top">CHANGE +<br>HR</div>
+      <div class="vf-bot">Human Layer</div>
+    </div>
+    <div class="vf-item">
+      <div class="vf-top">M&A +<br>STRATEGY</div>
+      <div class="vf-bot">Value Creation</div>
+    </div>
+    <div class="vf-item">
+      <div class="vf-top">AI<br>ENABLEMENT</div>
+      <div class="vf-bot">The Multiplier</div>
+    </div>
+    <div class="vf-item">
+      <div class="vf-top" style="font-size:20px">VECTOR™<br>FRAMEWORK</div>
+      <div class="vf-bot" style="color:var(--olive)">The System</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">
+      <svg style="width:22px;height:22px;display:inline-block;vertical-align:middle;margin-right:8px" viewBox="0 0 28 28" fill="none">
+        <circle cx="14" cy="4" r="2.5" fill="#CDEE00"/>
+        <circle cx="24" cy="10" r="1.8" fill="#CDEE00" opacity="0.7"/>
+        <circle cx="22" cy="22" r="2" fill="#CDEE00"/>
+        <circle cx="6" cy="18" r="1.5" fill="#CDEE00" opacity="0.6"/>
+        <circle cx="4" cy="8" r="2" fill="#CDEE00" opacity="0.8"/>
+        <line x1="14" y1="4" x2="24" y2="10" stroke="#CDEE00" stroke-width="0.6" opacity="0.5"/>
+        <line x1="24" y1="10" x2="22" y2="22" stroke="#CDEE00" stroke-width="0.6" opacity="0.5"/>
+        <line x1="22" y1="22" x2="6" y2="18" stroke="#CDEE00" stroke-width="0.6" opacity="0.5"/>
+        <line x1="6" y1="18" x2="4" y2="8" stroke="#CDEE00" stroke-width="0.6" opacity="0.5"/>
+      </svg>
+      <span>C</span>ONSTELLATION
+    </div>
+    <div class="footer-sub">Advisory Group · Powered by VECTOR™</div>
+  </div>
+  <div class="footer-right">
+    HQ Dubai, UAE<br>
+    constellationadvisory.ae<br>
+    <span style="color:var(--lime)">Confidential 2026</span>
+  </div>
+</footer>
+
+<script>
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animateCursor() {
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+document.querySelectorAll('a,button,.disc-item,.v-item,.line-card,.founder-card,.vf-item').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); ring.classList.add('hover'); });
+  el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
+});
+
+// ── NAV ──
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ── COUNTER ANIMATION ──
+function animateCounter(el, target, duration = 1500) {
+  let start = 0;
+  const step = timestamp => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(ease * target);
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  };
+  requestAnimationFrame(step);
+}
+
+// ── SCROLL REVEAL + CHART TRIGGERS ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    entry.target.classList.add('visible');
+
+    // Counters
+    entry.target.querySelectorAll('.counter, .stat-num').forEach(el => {
+      animateCounter(el, parseInt(el.dataset.target));
+    });
+    entry.target.querySelectorAll('[data-target]').forEach(el => {
+      if (!el.classList.contains('counter')) animateCounter(el, parseInt(el.dataset.target));
+    });
+
+    // Bar chart
+    if (entry.target.id === 'barChart' || entry.target.querySelector('#barChart')) {
+      document.querySelectorAll('.bar-fill').forEach(bar => {
+        const h = parseInt(bar.dataset.h);
+        bar.style.height = h + '%';
+      });
+    }
+    entry.target.querySelectorAll('.bar-fill').forEach(bar => {
+      setTimeout(() => { bar.style.height = bar.dataset.h + '%'; }, 200);
+    });
+
+    // Line chart
+    const linePath = entry.target.querySelector('#linePath') || (entry.target.id === 'lineChart' ? entry.target : null);
+    if (linePath || entry.target.querySelector('.chart-line-path')) {
+      const path = entry.target.querySelector('.chart-line-path') || document.querySelector('.chart-line-path');
+      const area = entry.target.querySelector('.chart-area-path') || document.querySelector('.chart-area-path');
+      const dots = entry.target.querySelectorAll('.chart-dot').length ? entry.target.querySelectorAll('.chart-dot') : document.querySelectorAll('.chart-dot');
+      if (path) { setTimeout(() => { path.style.strokeDashoffset = '0'; }, 300); }
+      if (area) { setTimeout(() => {
+        area.setAttribute('d', 'M0,140 C60,130 80,110 120,95 C160,80 180,70 220,55 C260,40 300,30 340,15 C360,10 380,8 400,5 L400,160 L0,160 Z');
+        area.style.opacity = '1';
+      }, 800); }
+      dots.forEach((d, i) => { setTimeout(() => { d.style.opacity = '1'; }, 600 + i * 200); });
+    }
+
+    // Radial
+    const radial = entry.target.querySelector('.radial-fill') || (entry.target.classList.contains('radial-fill') ? entry.target : null);
+    if (radial || entry.target.querySelector('#radial1')) {
+      const r = entry.target.querySelector('#radial1') || document.querySelector('#radial1');
+      if (r) setTimeout(() => { r.style.strokeDashoffset = 283 * (1 - 0.92); }, 400);
+    }
+  });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('.reveal, .num-card, #barChart, .chart-card').forEach(el => observer.observe(el));
+
+// Also observe hero stats
+document.querySelectorAll('.stat-num').forEach(el => {
+  const obs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      animateCounter(el, parseInt(el.dataset.target));
+      obs.disconnect();
+    }
+  });
+  obs.observe(el);
+});
+
+// ── CONSTELLATION STAR CANVAS ──
+(function() {
+  const canvas = document.getElementById('star-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, stars = [], connections = [], mouse = {x: -999, y: -999};
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function initStars() {
+    stars = [];
+    const count = Math.floor((W * H) / 14000);
+    for (let i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.8 + 0.4,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: (Math.random() - 0.5) * 0.15,
+        opacity: Math.random() * 0.6 + 0.2,
+        pulse: Math.random() * Math.PI * 2,
+        pulseSpeed: Math.random() * 0.02 + 0.008,
+        isKey: Math.random() < 0.08
+      });
+    }
+  }
+
+  function drawFrame() {
+    ctx.clearRect(0, 0, W, H);
+    const lime = '#CDEE00';
+    const now = Date.now() * 0.001;
+
+    // Draw connections between nearby stars
+    for (let i = 0; i < stars.length; i++) {
+      for (let j = i + 1; j < stars.length; j++) {
+        const dx = stars[i].x - stars[j].x;
+        const dy = stars[i].y - stars[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        const maxDist = 110;
+        if (dist < maxDist) {
+          const alpha = (1 - dist/maxDist) * 0.12;
+          ctx.beginPath();
+          ctx.moveTo(stars[i].x, stars[i].y);
+          ctx.lineTo(stars[j].x, stars[j].y);
+          ctx.strokeStyle = `rgba(205,238,0,${alpha})`;
+          ctx.lineWidth = 0.4;
+          ctx.stroke();
+        }
+      }
+
+      // Mouse proximity — draw brighter connections
+      const mdx = stars[i].x - mouse.x;
+      const mdy = stars[i].y - mouse.y;
+      const mdist = Math.sqrt(mdx*mdx + mdy*mdy);
+      if (mdist < 160) {
+        const alpha = (1 - mdist/160) * 0.5;
+        ctx.beginPath();
+        ctx.moveTo(stars[i].x, stars[i].y);
+        ctx.lineTo(mouse.x, mouse.y);
+        ctx.strokeStyle = `rgba(205,238,0,${alpha})`;
+        ctx.lineWidth = 0.6;
+        ctx.stroke();
+      }
+    }
+
+    // Draw stars
+    stars.forEach(star => {
+      star.pulse += star.pulseSpeed;
+      const pOpacity = star.opacity + Math.sin(star.pulse) * 0.15;
+      const pR = star.isKey ? star.r * (1 + Math.sin(star.pulse) * 0.3) : star.r;
+
+      if (star.isKey) {
+        // Glow for key stars
+        const grd = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, pR * 5);
+        grd.addColorStop(0, `rgba(205,238,0,${pOpacity * 0.4})`);
+        grd.addColorStop(1, 'rgba(205,238,0,0)');
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, pR * 5, 0, Math.PI * 2);
+        ctx.fillStyle = grd;
+        ctx.fill();
+      }
+
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, pR, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(205,238,0,${Math.min(1, pOpacity)})`;
+      ctx.fill();
+
+      // Move
+      star.x += star.vx;
+      star.y += star.vy;
+      if (star.x < -10) star.x = W + 10;
+      if (star.x > W + 10) star.x = -10;
+      if (star.y < -10) star.y = H + 10;
+      if (star.y > H + 10) star.y = -10;
+    });
+
+    requestAnimationFrame(drawFrame);
+  }
+
+  window.addEventListener('resize', () => { resize(); initStars(); });
+  document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+  resize(); initStars(); drawFrame();
+})();
+
+</script>
+</body>
+</html>
